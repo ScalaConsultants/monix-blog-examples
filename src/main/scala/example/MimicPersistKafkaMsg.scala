@@ -78,15 +78,17 @@ object MimicPersistKafkaMsg extends App {
       case CommitableMsg(_, offset) =>
         Future.successful(offset)
     }
-    .groupedWithin(10, 1.seconds)
+    .groupedWithin(100, 1.seconds)
     .filter(_.nonEmpty)
     .mapAsync(1)(_.last.commitOffset)
     .via(killSwitch.flow)
     .runWith(Sink.ignore)
 
+  println("I do _have_ some doubts about `Observable.intervalAtFixedRate` because of Monix stream falls behind.`")
+
   val monixObservable =
     Observable
-      .intervalAtFixedRate(10.millis)
+      .intervalAtFixedRate(100.millis)
       .map(makeCommitableMessage)
 
   val monixRun = monixObservable

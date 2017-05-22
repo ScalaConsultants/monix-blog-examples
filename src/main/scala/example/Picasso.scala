@@ -1,10 +1,10 @@
 package example
 
 import monix.eval.Task
-import monix.execution.Scheduler
+import monix.execution.{CancelableFuture, Scheduler}
 
-import scala.concurrent.TimeoutException
 import scala.concurrent.duration._
+import scala.concurrent.{Await, TimeoutException}
 import scala.util.Random
 
 object Picasso extends App {
@@ -61,6 +61,8 @@ object Picasso extends App {
         Task.now(resolvedResult)
     }.flatMap(storeResult(pic, _).executeOn(ioScheduler))
 
-  analyseAndStoreResult(maybePicassoImage).runAsync //CancellableFuture[Unit]
-
+  analyseAndStoreResult(maybePicassoImage).
+  val done: CancelableFuture[Unit] = analyseAndStoreResult(maybePicassoImage).runAsync
+  done.foreach(_ => println("Done!"))
+  Await.result(done, 30.seconds)
 }
