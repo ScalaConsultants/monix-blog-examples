@@ -13,6 +13,7 @@ object MVarExample extends App {
   val N = 100000
   val mvar = MVar.empty[Int]
 
+  //Puts 'n', 'n+1', ..., 'N-1' to 'mvar'
   def produce(n: Int): Task[Unit] = {
     println(s"produce($n)")
     if (n < N) {
@@ -26,6 +27,7 @@ object MVarExample extends App {
     }
   }
 
+  //Takes 'N-c' values from 'mvar' and sums them. Fails if cannot take in 100 ms.
   def consume(sum: Long, c: Int): Task[Long] = {
     println(s"consume($sum, $c)")
     if (c < N) {

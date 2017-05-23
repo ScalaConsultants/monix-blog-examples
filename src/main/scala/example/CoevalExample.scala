@@ -23,8 +23,8 @@ object CoevalExample extends App {
     .onErrorFallbackTo(promptForNumber(lastPrompt))
     .onErrorRecover {
       case NonFatal(_) => 42
-    }.memoize
+    }.memoize // Saves result after first execution 
 
-  println(s"${num.value}")
-  println(s"${num.value}")
+  println(s"${num.value}") // First call, with side effects and actual computations
+  println(s"${num.value}") // Returns memoized result
 }
