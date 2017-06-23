@@ -61,7 +61,6 @@ object Picasso extends App {
         Task.now(resolvedResult)
     }.flatMap(storeResult(pic, _).executeOn(ioScheduler))
 
-  analyseAndStoreResult(maybePicassoImage).
   val done: CancelableFuture[Unit] = analyseAndStoreResult(maybePicassoImage).runAsync
   done.foreach(_ => println("Done!"))
   Await.result(done, 30.seconds)
